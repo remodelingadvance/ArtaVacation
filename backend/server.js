@@ -6,6 +6,8 @@ import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongooseConnection from './src/config/database.js';
+import authRoutes from './src/routes/auth.routes.js';
+import propertyRoutes from './src/routes/property.routes.js';
 
 dotenv.config();
 
@@ -45,6 +47,10 @@ app.use(mongoSanitize());
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/properties', propertyRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
