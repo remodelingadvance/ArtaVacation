@@ -15,6 +15,7 @@ import reviewRoutes from './src/routes/review.routes.js';
 import paymentRoutes from './src/routes/payment.routes.js';
 import adminRoutes from './src/routes/admin.routes.js';
 import themeRoutes from './src/routes/theme.routes.js';
+import availabilityRoutes from './src/routes/availability.routes.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
 import { notFoundHandler } from './src/middlewares/notFoundHandler.js';
 
@@ -69,6 +70,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/themes', themeRoutes);
+app.use('/api/availability', availabilityRoutes);
 
 // 404 Handler
 app.use(notFoundHandler);
