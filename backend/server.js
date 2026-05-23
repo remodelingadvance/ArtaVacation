@@ -8,6 +8,15 @@ import rateLimit from 'express-rate-limit';
 import mongooseConnection from './src/config/database.js';
 import authRoutes from './src/routes/auth.routes.js';
 import propertyRoutes from './src/routes/property.routes.js';
+import bookingRoutes from './src/routes/booking.routes.js';
+import userRoutes from './src/routes/user.routes.js';
+import wishlistRoutes from './src/routes/wishlist.routes.js';
+import reviewRoutes from './src/routes/review.routes.js';
+import paymentRoutes from './src/routes/payment.routes.js';
+import adminRoutes from './src/routes/admin.routes.js';
+import themeRoutes from './src/routes/theme.routes.js';
+import { errorHandler } from './src/middlewares/errorHandler.js';
+import { notFoundHandler } from './src/middlewares/notFoundHandler.js';
 
 dotenv.config();
 
@@ -21,17 +30,19 @@ app.use(helmet());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: 'Too many requests from this IP'
+  message: 'Too many requests from this IP',
 });
 app.use('/api/', limiter);
 
 // CORS Configuration
-app.use(cors({
-  origin: [process.env.FRONTEND_URL, process.env.ADMIN_URL],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL, process.env.ADMIN_URL],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // Body Parser
 app.use(express.json({ limit: '50mb' }));
@@ -51,6 +62,19 @@ app.get('/api/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/themes', themeRoutes);
+
+// 404 Handler
+app.use(notFoundHandler);
+
+// Error Handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
